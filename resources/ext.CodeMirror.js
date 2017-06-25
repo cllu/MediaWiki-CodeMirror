@@ -340,6 +340,35 @@
     updateToolbarButton();
   }
 
+
+  function hint(cm, option) {
+    var cursor = cm.getCursor(), line = cm.getLine(cursor.line);
+    var start = cursor.ch, end = cursor.ch;
+    while (start && /\w/.test(line.charAt(start - 1))) --start;
+    while (end < line.length && /\w/.test(line.charAt(end))) ++end;
+    var word = line.slice(start, end).toLowerCase();
+    return new Promise(function(accept) {
+      fetch('/w/api.php?action=linksuggest&format=json&get=suggestions&query=' + word, {
+        credentials: 'include'
+      })
+          .then(function (resp) {
+            return resp.json();
+          })
+          .then(function (data) {
+            var suggestions = data.linksuggest.result.suggestions;
+            if (suggestions.length > 0) {
+              return accept({
+                list: suggestions,
+                from: CodeMirror.Pos(cursor.line, start),
+                to: CodeMirror.Pos(cursor.line, end)
+              });
+            } else {
+              return accept(null);
+            }
+          });
+    });
+  }
+
   /**
    * Replaces the default textarea with CodeMirror
    */
@@ -350,11 +379,12 @@
       return;
     }
 
-    var mode;
+    var mode, hintOptions;
     var lineNumbers = true;
     if (currentLanguage === 'wikitext') {
       mode = 'text/mediawiki';
       lineNumbers = false;
+      hintOptions = {hint: hint};
     } else {
       mode = 'text/' + currentLanguage;
     }
@@ -370,10 +400,20 @@
         readOnly: $textbox1[0].readOnly,
         mode: mode,
         extraKeys: {
+          "Ctrl-Alt-Space": "autocomplete",
+          "Ctrl-Alt-F": function(cm) {
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+          },
           Tab: false
         },
         keyMap: 'vim',
         theme: 'github',
+        styleActiveLine: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        autoCloseBrackets: true,
+        autoCloseTag: true,
+        hintOptions: hintOptions,
         lineNumbers: lineNumbers
       });
       $codeMirror = $(codeMirror.getWrapperElement());
