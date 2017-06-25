@@ -16,7 +16,9 @@
 	},
 	"AutoloadClasses": {
 		"CodeMirrorHooks": "CodeMirror.hooks.php",
-		"CodeMirrorAPI": "CodeMirror.api.php"
+		"CodeMirrorAPI": "CodeMirror.api.php",
+		"MarkdownContent": "content/MarkdownContent.php",
+		"MarkdownContentHandler": "content/MarkdownContentHandler.php"
 	},
 	"APIModules": {
 		"linksuggest": "CodeMirrorAPI"
@@ -124,6 +126,16 @@
 				"ext.CodeMirror.lib"
 			]
 		},
+		"ext.CodeMirror.mode.markdown": {
+			"scripts": [
+				"lib/codemirror/mode/markdown/markdown.js",
+				"lib/codemirror/addon/edit/continuelist.js"
+			],
+			"dependencies": [
+				"ext.CodeMirror.lib",
+				"ext.CodeMirror.mode.xml"
+			]
+		},
 		"ext.CodeMirror.mode.clike": {
 			"scripts": "lib/codemirror/mode/clike/clike.js",
 			"dependencies": [
@@ -186,7 +198,13 @@
 		],
 		"GetPreferences": [
 			"CodeMirrorHooks::onGetPreferences"
+		],
+		"ContentHandlerDefaultModelFor": [
+			"CodeMirrorHooks::onContentHandlerDefaultModelFor"
 		]
+	},
+	"ContentHandlers": {
+		"markdown": "MarkdownContentHandler"
 	},
 	"VisualEditorPluginModules": [
 		"ext.CodeMirror.visualEditor.init",

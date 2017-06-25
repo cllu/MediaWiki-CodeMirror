@@ -1,4 +1,6 @@
 <?php
+define( 'CONTENT_MODEL_MARKDOWN', 'markdown' );
+define( 'CONTENT_FORMAT_MARKDOWN', 'text/markdown' );
 
 class CodeMirrorHooks {
 
@@ -17,6 +19,8 @@ class CodeMirrorHooks {
             return 'css';
         } elseif ($model === CONTENT_MODEL_JSON) {
             return 'json';
+        } elseif ($model === CONTENT_MODEL_MARKDOWN) {
+            return 'markdown';
         }
 
         // Give extensions a chance
@@ -121,6 +125,19 @@ class CodeMirrorHooks {
 
 		return $config;
 	}
+
+    public static function onContentHandlerDefaultModelFor($title, &$model) {
+	    $pathinfo =  pathinfo($title->getText());
+	    if ($pathinfo['extension']) {
+	        switch ($pathinfo['extension']) {
+                case 'md':
+                case 'markdown':
+                    $model = CONTENT_MODEL_MARKDOWN;
+                    return false;
+            }
+        }
+        return true;
+    }
 
 	/**
 	 * MakeGlobalVariablesScript hook handler
