@@ -24,11 +24,11 @@
 		"ext.CodeMirror": {
 			"dependencies": [
 				"ext.CodeMirror.lib",
-				"ext.CodeMirror.mode.mediawiki",
 				"jquery.textSelection",
 				"mediawiki.api",
 				"mediawiki.api.options",
-				"user.options"
+				"user.options",
+				"ext.CodeMirror.keymap.vim"
 			],
 			"scripts": [
 				"ext.CodeMirror.js"
@@ -42,10 +42,17 @@
 		},
 		"ext.CodeMirror.lib": {
 			"scripts": [
-				"lib/codemirror/lib/codemirror.js"
+				"lib/codemirror/lib/codemirror.js",
+				"lib/codemirror/addon/search/jump-to-line.js",
+				"lib/codemirror/addon/search/match-highlighter.js",
+				"lib/codemirror/addon/search/search.js",
+				"lib/codemirror/addon/search/searchcursor.js",
+				"lib/codemirror/addon/dialog/dialog.js"
 			],
 			"styles": [
-				"lib/codemirror/lib/codemirror.css"
+				"lib/codemirror/lib/codemirror.css",
+				"ext.CodeMirror.theme.github.less",
+				"lib/codemirror/addon/dialog/dialog.css"
 			]
 		},
 		"ext.CodeMirror.mode.mediawiki": {
@@ -55,44 +62,50 @@
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.css": {
+		"ext.CodeMirror.keymap.vim": {
+			"scripts": "lib/codemirror/keymap/vim.js",
+			"dependencies": [
+				"ext.CodeMirror.lib"
+			]
+		},
+		"ext.CodeMirror.mode.css": {
 			"scripts": "lib/codemirror/mode/css/css.js",
 			"dependencies": [
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.javascript": {
+		"ext.CodeMirror.mode.javascript": {
 			"scripts": "lib/codemirror/mode/javascript/javascript.js",
 			"dependencies": [
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.xml": {
+		"ext.CodeMirror.mode.xml": {
 			"scripts": "lib/codemirror/mode/xml/xml.js",
 			"dependencies": [
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.htmlmixed": {
+		"ext.CodeMirror.mode.htmlmixed": {
 			"scripts": "lib/codemirror/mode/htmlmixed/htmlmixed.js",
 			"dependencies": [
-				"ext.CodeMirror.lib.mode.xml",
-				"ext.CodeMirror.lib.mode.javascript",
-				"ext.CodeMirror.lib.mode.css",
+				"ext.CodeMirror.mode.xml",
+				"ext.CodeMirror.mode.javascript",
+				"ext.CodeMirror.mode.css",
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.clike": {
+		"ext.CodeMirror.mode.clike": {
 			"scripts": "lib/codemirror/mode/clike/clike.js",
 			"dependencies": [
 				"ext.CodeMirror.lib"
 			]
 		},
-		"ext.CodeMirror.lib.mode.php": {
+		"ext.CodeMirror.mode.php": {
 			"scripts": "lib/codemirror/mode/php/php.js",
 			"dependencies": [
-				"ext.CodeMirror.lib.mode.htmlmixed",
-				"ext.CodeMirror.lib.mode.clike",
+				"ext.CodeMirror.mode.htmlmixed",
+				"ext.CodeMirror.mode.clike",
 				"ext.CodeMirror.lib"
 			]
 		},
@@ -136,8 +149,11 @@
 		"MakeGlobalVariablesScript": [
 			"CodeMirrorHooks::onMakeGlobalVariablesScript"
 		],
-		"BeforePageDisplay": [
-			"CodeMirrorHooks::onBeforePageDisplay"
+		"EditPage::showEditForm:initial": [
+			"CodeMirrorHooks::editPageShowEditFormInitial"
+		],
+		"EditPage::showReadOnlyForm:initial": [
+			"CodeMirrorHooks::editPageShowEditFormInitial"
 		],
 		"GetPreferences": [
 			"CodeMirrorHooks::onGetPreferences"

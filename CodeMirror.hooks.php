@@ -2,6 +2,31 @@
 
 class CodeMirrorHooks {
 
+    /**
+     * @param Title $title
+     * @param $model
+     * @param $format
+     * @return null|string
+     */
+    static function getPageLanguage( Title $title, $model, $format ) {
+        if ($model === CONTENT_MODEL_WIKITEXT) {
+            return 'wikitext';
+        } elseif ($model === CONTENT_MODEL_JAVASCRIPT) {
+            return 'javascript';
+        } elseif ($model === CONTENT_MODEL_CSS) {
+            return 'css';
+        } elseif ($model === CONTENT_MODEL_JSON) {
+            return 'json';
+        }
+
+        // Give extensions a chance
+        // Note: $model and $format were added around the time of MediaWiki 1.28.
+        $lang = null;
+        Hooks::run( 'CodeMirrorGetPageLanguage', [ $title, &$lang, $model, $format ] );
+
+        return $lang;
+    }
+
 	/**
 	 * Checks, if CodeMirror should be loaded on this page or not.
 	 *
@@ -113,19 +138,25 @@ class CodeMirrorHooks {
 		}
 	}
 
-	/**
-	 * BeforePageDisplay hook handler
-	 *
-	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
-	 *
-	 * @param OutputPage $out
-	 * @param Skin $skin
-	 */
-	public static function onBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
-		if ( self::isCodeMirrorEnabled( $out->getContext() ) ) {
-			$out->addModules( 'ext.CodeMirror' );
-		}
-	}
+    /**
+     * @param EditPage $editpage
+     * @param OutputPage $output
+     * @return bool
+     */
+    public static function editPageShowEditFormInitial( $editpage, $output ) {
+        $title = $editpage->getContextTitle();
+        $model = $editpage->contentModel;
+        $format = $editpage->contentFormat;
+
+        $lang = self::getPageLanguage( $title, $model, $format );
+        if ( self::isCodeMirrorEnabled( $output->getContext() ) ) {
+            $output->addModules( 'ext.CodeMirror' );
+            $mode = $lang === 'wikitext' ? 'ext.CodeMirror.mode.mediawiki' : 'ext.CodeMirror.mode.' . $lang;
+            $output->addModules($mode);
+            $output->addJsConfigVars( 'wgCodeMirrorCurrentLanguage', $lang );
+        }
+        return true;
+    }
 
 	/**
 	 * GetPreferences hook handler
