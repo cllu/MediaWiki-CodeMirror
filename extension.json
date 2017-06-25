@@ -18,7 +18,9 @@
 		"CodeMirrorHooks": "CodeMirror.hooks.php",
 		"CodeMirrorAPI": "CodeMirror.api.php",
 		"MarkdownContent": "content/MarkdownContent.php",
-		"MarkdownContentHandler": "content/MarkdownContentHandler.php"
+		"MarkdownContentHandler": "content/MarkdownContentHandler.php",
+		"YamlContent": "content/YamlContent.php",
+		"YamlContentHandler": "content/YamlContentHandler.php"
 	},
 	"APIModules": {
 		"linksuggest": "CodeMirrorAPI"
@@ -103,6 +105,12 @@
 				"lib/codemirror/mode/javascript/javascript.js",
 				"lib/codemirror/addon/hint/javascript-hint.js"
 			],
+			"dependencies": [
+				"ext.CodeMirror.lib"
+			]
+		},
+		"ext.CodeMirror.mode.yaml": {
+			"scripts": "lib/codemirror/mode/yaml/yaml.js",
 			"dependencies": [
 				"ext.CodeMirror.lib"
 			]
@@ -204,7 +212,8 @@
 		]
 	},
 	"ContentHandlers": {
-		"markdown": "MarkdownContentHandler"
+		"markdown": "MarkdownContentHandler",
+		"yaml": "YamlContentHandler"
 	},
 	"VisualEditorPluginModules": [
 		"ext.CodeMirror.visualEditor.init",

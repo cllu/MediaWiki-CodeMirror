@@ -1,7 +1,4 @@
 <?php
-define( 'CONTENT_MODEL_MARKDOWN', 'markdown' );
-define( 'CONTENT_FORMAT_MARKDOWN', 'text/markdown' );
-
 /**
  * Content handler for Markdown pages.
  *

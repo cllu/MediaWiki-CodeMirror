@@ -1,6 +1,8 @@
 <?php
 define( 'CONTENT_MODEL_MARKDOWN', 'markdown' );
 define( 'CONTENT_FORMAT_MARKDOWN', 'text/markdown' );
+define( 'CONTENT_MODEL_YAML', 'yaml' );
+define( 'CONTENT_FORMAT_YAML', 'text/yaml' );
 
 class CodeMirrorHooks {
 
@@ -21,6 +23,8 @@ class CodeMirrorHooks {
             return 'json';
         } elseif ($model === CONTENT_MODEL_MARKDOWN) {
             return 'markdown';
+        } elseif ($model === CONTENT_MODEL_YAML) {
+            return 'yaml';
         }
 
         // Give extensions a chance
@@ -133,6 +137,10 @@ class CodeMirrorHooks {
                 case 'md':
                 case 'markdown':
                     $model = CONTENT_MODEL_MARKDOWN;
+                    return false;
+                case 'yml':
+                case 'yaml':
+                    $model = CONTENT_MODEL_YAML;
                     return false;
             }
         }
