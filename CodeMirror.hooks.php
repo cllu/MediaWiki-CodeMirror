@@ -30,7 +30,7 @@ class CodeMirrorHooks {
         // Give extensions a chance
         // Note: $model and $format were added around the time of MediaWiki 1.28.
         $lang = null;
-        Hooks::run( 'CodeMirrorGetPageLanguage', [ $title, &$lang, $model, $format ] );
+        Hooks::run( 'CodeEditorGetPageLanguage', [ $title, &$lang, $model, $format ] );
 
         return $lang;
     }
@@ -132,7 +132,7 @@ class CodeMirrorHooks {
 
     public static function onContentHandlerDefaultModelFor($title, &$model) {
 	    $pathinfo =  pathinfo($title->getText());
-	    if ($pathinfo['extension']) {
+	    if (array_key_exists('extension', $pathinfo)) {
 	        switch ($pathinfo['extension']) {
                 case 'md':
                 case 'markdown':

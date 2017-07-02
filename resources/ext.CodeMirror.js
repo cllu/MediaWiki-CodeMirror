@@ -369,6 +369,15 @@
     });
   }
 
+  function betterTab(cm) {
+    if (cm.somethingSelected()) {
+      cm.indentSelection("add");
+    } else {
+      cm.replaceSelection(cm.getOption("indentWithTabs")? "\t":
+          Array(cm.getOption("indentUnit") + 1).join(" "), "end", "+input");
+    }
+  }
+
   /**
    * Replaces the default textarea with CodeMirror
    */
@@ -385,9 +394,12 @@
       mode = 'text/mediawiki';
       lineNumbers = false;
       hintOptions = {hint: hint};
+    } else if (currentLanguage === 'lua') {
+      mode = 'text/x-' + currentLanguage;
     } else {
       mode = 'text/' + currentLanguage;
     }
+    console.log(mode);
 
     mw.loader.using(config.pluginModules, function () {
       var $codeMirror,
@@ -404,8 +416,9 @@
           "Ctrl-Alt-F": function(cm) {
             cm.setOption("fullScreen", !cm.getOption("fullScreen"));
           },
-          Tab: false
+          Tab: betterTab
         },
+
         keyMap: 'vim',
         theme: 'github',
         styleActiveLine: true,

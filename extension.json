@@ -115,6 +115,12 @@
 				"ext.CodeMirror.lib"
 			]
 		},
+		"ext.CodeMirror.mode.lua": {
+			"scripts": "lib/codemirror/mode/lua/lua.js",
+			"dependencies": [
+				"ext.CodeMirror.lib"
+			]
+		},
 		"ext.CodeMirror.mode.xml": {
 			"scripts": "lib/codemirror/mode/xml/xml.js",
 			"dependencies": [
