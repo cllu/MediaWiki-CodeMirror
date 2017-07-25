@@ -142,6 +142,9 @@ class CodeMirrorHooks {
                 case 'yaml':
                     $model = CONTENT_MODEL_YAML;
                     return false;
+                case 'json':
+                    $model = CONTENT_MODEL_JSON;
+                    return false;
             }
         }
         return true;
