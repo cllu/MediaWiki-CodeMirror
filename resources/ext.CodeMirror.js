@@ -7,7 +7,8 @@
   // codeMirror needs a special textselection jQuery function to work, save the current one to restore when
   // CodeMirror get's disabled.
   origTextSelection = $.fn.textSelection;
-  useCodeMirror = mw.user.options.get('usecodemirror') > 0;
+  //useCodeMirror = mw.user.options.get('usecodemirror') > 0;
+  useCodeMirror = true;
   api = new mw.Api();
   originHooksTextarea = $.valHooks.textarea;
   // The WikiEditor extension exists the WikiEditor beta toolbar is used by the user
