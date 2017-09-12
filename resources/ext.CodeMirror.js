@@ -406,10 +406,11 @@
       var $codeMirror,
           $textbox1 = $('#wpTextbox1');
 
-      codeMirror = CodeMirror.fromTextArea($textbox1[0], {
+      var options = {
         mwConfig: config,
         // styleActiveLine: true, // disabled since Bug: T162204, maybe should be optional
         lineWrapping: true,
+        indentUnit: 4,
         readOnly: $textbox1[0].readOnly,
         mode: mode,
         extraKeys: {
@@ -429,7 +430,11 @@
         autoCloseTag: true,
         hintOptions: hintOptions,
         lineNumbers: lineNumbers
-      });
+      };
+      if (currentLanguage === 'lua') {
+	options.indentWithTabs = true;
+      }
+      codeMirror = CodeMirror.fromTextArea($textbox1[0], options);
       $codeMirror = $(codeMirror.getWrapperElement());
 
       // HACK: <textarea> font size varies by browser (chrome/FF/IE)
